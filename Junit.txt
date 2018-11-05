@@ -1,0 +1,155 @@
+Totally 3 classes involved:
+
+1. The class whose functionality you are planning to test
+
+public class PrimeNumberChecker {
+   public Boolean validate(final Integer primeNumber) {
+      for (int i = 2; i < (primeNumber / 2); i++) {
+         if (primeNumber % i == 0) {
+            return false;
+         }
+      }
+      return true;
+   }
+}
+
+2. The testclass which is going to test the functionality
+@RunWith(Parameterized.class)
+public class PrimeNumberCheckerTest {
+   private Integer inputNumber;
+   private Boolean expectedResult;
+   private PrimeNumberChecker primeNumberChecker;
+
+   @Before
+   public void initialize() {
+      primeNumberChecker = new PrimeNumberChecker();
+   }
+
+   // Each parameter should be placed as an argument here
+   // Every time runner triggers, it will pass the arguments
+   // from parameters we defined in primeNumbers() method
+	
+   public PrimeNumberCheckerTest(Integer inputNumber, Boolean expectedResult) {
+      this.inputNumber = inputNumber;
+      this.expectedResult = expectedResult;
+   }
+
+   @Parameterized.Parameters
+   public static Collection primeNumbers() {
+      return Arrays.asList(new Object[][] {
+         { 2, true },
+         { 6, false },
+         { 19, true },
+         { 22, false },
+         { 23, true }
+      });
+   }
+
+   // This test will run 4 times since we have 5 parameters defined
+   @Test
+   public void testPrimeNumberChecker() {
+      System.out.println("Parameterized Number is : " + inputNumber);
+      assertEquals(expectedResult, 
+      primeNumberChecker.validate(inputNumber));
+   }
+}
+
+3. The class with the main method to call the testclass.
+
+public class TestRunner {
+   public static void main(String[] args) {
+      Result result = JUnitCore.runClasses(PrimeNumberCheckerTest.class);
+
+      for (Failure failure : result.getFailures()) {
+         System.out.println(failure.toString());
+      }
+		
+      System.out.println(result.wasSuccessful());
+   }
+}  
+
+
+
+1. Parameterized tests allow a developer to run the same test over and over again using different values.
+
+Annotate test class with @RunWith(Parameterized.class).
+
+Create a public static method annotated with @Parameters that returns a Collection of Objects (as Array) as test data set.
+
+ @Parameterized.Parameters
+   public static Collection primeNumbers() {
+      return Arrays.asList(new Object[][] {
+         { 2, true },
+         { 6, false },
+         { 19, true },
+         { 22, false },
+         { 23, true }
+      });
+   }
+   
+   
+ 2.Test suite is used to bundle a few unit test cases and run them together. In JUnit, both @RunWith and @Suite annotations are used to run the suite tests.
+ This scenario is used when we have
+-->1 class whose functionality needs to be tested
+
+--->Multiple test classes which will test the functionality.Test Suite is
+required here
+
+@RunWith(Suite.class)
+
+@Suite.SuiteClasses({
+   TestJunit1.class,
+   TestJunit2.class
+})
+TestJunit1 and TestJunit2 are the 2 test classes
+
+3.
+A test method annotated with @Ignore will not be executed.
+
+If a test class is annotated with @Ignore, then none of its test methods will be executed.
+
+4.JUnit provides a handy option of Timeout. If a test case takes more time than the specified number of milliseconds, then JUnit will automatically mark it as failed. The timeout parameter is used along with @Test annotation.
+
+ @Test(timeout = 1000)
+   public void testPrintMessage() {	
+      System.out.println("Inside testPrintMessage()");     
+      messageUtil.printMessage();     
+   }
+   
+ 5.JUnit provides an option of tracing the exception handling of code. You can test whether the code throws a desired exception or not. The expected parameter is used along with @Test annotation.
+ 
+  @Test(expected = ArithmeticException.class)
+   public void testPrintMessage() {	
+      System.out.println("Inside testPrintMessage()");     
+      messageUtil.printMessage();     
+   }
+
+6.@Before annotated public void methods are executed before the @Test method
+@After annotated public void metods are executed after the @Test method
+
+Annotating a public static void method with @BeforeClass causes it to be run once before any of the test methods in the class.
+
+@AfterClass
+
+This will perform the method after all tests have finished. This can be used to perform clean-up activities.
+
+ 7. Assert methods
+ 
+ assertEquals-checks if 2 objs/primitives are equals or not
+ 
+ assertSame-checks if 2 references point to the same obj
+ 
+ assetNotSame-checks if 2 references do not point to the same obj
+ 
+ assertNull-checks if obj is null
+ 
+ assertNotNull-checks if obj is not null
+ 
+ assertTrue-checks if condition is true
+ 
+ assertFalse-checks if condition is false
+ 
+ assertArrayEquals-checks if 2 arrays are equal
+ 
+ 
+ 
