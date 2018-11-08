@@ -1,0 +1,11 @@
+Dirty read: The meaning of this term is as bad as it sounds. You're permitted to read uncommitted, or dirty , data. You can achieve this effect by just opening an OS file that someone else is writing and reading whatever data happens to be there. Data integrity is compromised, foreign keys are violated, and unique constraints are ignored.
+
+Nonrepeatable read: This simply means that if you read a row at time T1 and try to reread that row at time T2, the row may have changed. It may have disappeared, it may have been updated, and so on.
+
+Phantom read: This means that if you execute a query at time T1 and re-execute it at time T2, additional rows may have been added to the database, which may affect your results. This differs from a nonrepeatable read in that with a phantom read, data you already read hasn't been changed, but instead, more data satisfies your query criteria than before. 
+
+Isolation Level	Dirty Read	Nonrepeatable Read	Phantom Read
+READ UNCOMMITTED	Permitted	Permitted	Permitted
+READ COMMITTED	--	Permitted	Permitted
+REPEATABLE READ	--	--	Permitted
+SERIALIZABLE	--	--	--
